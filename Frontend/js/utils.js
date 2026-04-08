@@ -28,20 +28,25 @@ export const api = {
 };
 
 export const Auth = {
+  // Store user in localStorage with key "jobportal_user"
   getUser: () => {
     try {
-      return JSON.parse(sessionStorage.getItem("user") || "null");
+      return JSON.parse(localStorage.getItem("jobportal_user") || "null");
     } catch {
       return null;
     }
   },
-  setUser: (u) => sessionStorage.setItem("user", JSON.stringify(u)),
-  logout: () => sessionStorage.removeItem("user"),
-  redirect: (role) =>
-    (window.location.href =
-      role === "employer"
-        ? "employer-dashboard.html"
-        : "seeker-dashboard.html"),
+  setUser: (user) =>
+    localStorage.setItem("jobportal_user", JSON.stringify(user)),
+  logout: () => {
+    localStorage.removeItem("jobportal_user");
+    sessionStorage.clear(); // clear any leftover session data
+  },
+  // Redirect to the correct dashboard based on role
+  redirect: (role) => {
+    window.location.href =
+      role === "employer" ? "employer-dashboard.html" : "seeker-dashboard.html";
+  },
 };
 
 export function escapeHtml(str) {
@@ -83,7 +88,7 @@ export function statusBadge(status) {
 
 export function showToast(msg, type = "success") {
   const toast = document.createElement("div");
-  toast.className = `toast toast-${type}`;
+  toast.className = `toast-global toast-${type}`;
   toast.innerHTML = `<i class="fa-solid ${type === "success" ? "fa-circle-check" : "fa-circle-exclamation"}"></i> ${msg}`;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);

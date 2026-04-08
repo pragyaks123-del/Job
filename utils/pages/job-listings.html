@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Job Listings | Smart Job Portal</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../../Frontend/css/main.css" />
+    <style>
+      /* same toast & badge styles as dashboard */
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navbar-inner">
+        <a href="index.html" class="logo"
+          ><i class="fas fa-briefcase"></i> JobPortal</a
+        >
+        <div id="nav-links"></div>
+        <div id="nav-actions"></div>
+      </div>
+    </nav>
+    <section class="page-hero">
+      <div class="container">
+        <h1><i class="fas fa-list"></i> Job Listings</h1>
+        <p>Find your next opportunity</p>
+      </div>
+    </section>
+
+    <div class="filters-bar">
+      <div class="container">
+        <div class="filters-inner">
+          <input
+            type="text"
+            id="search-keyword"
+            placeholder="🔍 Keyword"
+            oninput="debounceSearch()"
+          /><input
+            type="text"
+            id="search-location"
+            placeholder="📍 Location"
+            oninput="debounceSearch()"
+          /><select id="filter-category" onchange="filterJobs()">
+            <option value="">All Categories</option>
+            <option>Technology</option>
+            <option>Marketing</option></select
+          ><select id="filter-type" onchange="filterJobs()">
+            <option value="">All Types</option>
+            <option value="full-time">Full Time</option></select
+          ><button class="btn btn-primary" onclick="filterJobs()">
+            <i class="fas fa-search"></i> Search</button
+          ><button class="btn btn-outline" onclick="clearAllFilters()">
+            <i class="fas fa-eraser"></i> Clear
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <div class="container">
+        <div class="page-layout">
+          <aside class="sidebar">
+            <div class="sidebar-card">
+              <div class="sidebar-title">
+              
+              </div>
+             
+               
+        
+                </div>
+              </div>
+            </div>
+          </aside>
+          <div class="jobs-area">
+            <div id="employer-tabs-container" style="display: none">
+              <div class="employer-tabs">
+                <div class="emp-tab active" data-emp-tab="listings">
+                  <i class="fas fa-bullhorn"></i> All Jobs
+                </div>
+                <div class="emp-tab" data-emp-tab="myjobs">
+                  <i class="fas fa-list-ul"></i> My Jobs (2.4)
+                </div>
+                <div class="emp-tab" data-emp-tab="applicants">
+                  <i class="fas fa-address-card"></i> Review Apps (4.2)
+                </div>
+              </div>
+            </div>
+            <div class="results-header">
+              <div id="results-count"></div>
+              <select id="sort-select" onchange="sortAndRender()">
+                <option value="newest">Newest</option>
+                <option value="salary_high">Salary High-Low</option>
+              </select>
+            </div>
+            <div id="tab-listings" class="jobs-list">
+              <div class="loader"></div>
+            </div>
+            <div id="tab-myjobs" class="jobs-list hidden">
+              <div class="loader"></div>
+            </div>
+            <div id="tab-applicants" class="hidden">
+              <select
+                id="job-select"
+                class="form-control"
+                onchange="loadApplicants()"
+              >
+                <option value="">— Choose job —</option>
+              </select>
+              <div id="applicants-list"></div>
+            </div>
+            <div class="pagination" id="pagination"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Edit & Delete modals (same as dashboard, for employer My Jobs) -->
+    <div class="modal-overlay" id="edit-modal">...</div>
+    <div class="modal-overlay" id="delete-modal">...</div>
+
+    <script type="module">
+      import {
+        api,
+        Auth,
+        escapeHtml,
+        formatSalary,
+        formatDate,
+        statusBadge,
+        showToast,
+      } from "../../Frontend/js/utils.js";
+
+      /* =========================
+   🔥 GLOBAL DEBUGGER
+========================= */
+      window.addEventListener("error", (e) => {
+        console.error("🔥 JS Error:", e.message, e.filename, e.lineno);
+      });
+
+      window.addEventListener("unhandledrejection", (e) => {
+        console.error("🔥 Promise Error:", e.reason);
+      });
+
+      /* =========================
+   📦 STATE
+========================= */
+      let allJobs = [];
+      let filteredJobs = [];
+      let debounceTimer;
+
+      /* =========================
+   🔧 SAFE CALL (for buttons)
+========================= */
+      window.safeCall = function (fnName, ...args) {
+        try {
+          if (typeof window[fnName] !== "function") {
+            throw new Error(fnName + " not defined");
+          }
+          window[fnName](...args);
+        } catch (err) {
+          console.error("🚨 SafeCall:", err.message);
+          alert(err.message);
+        }
+      };
+
+      /* =========================
+   🔍 DEBOUNCE SEARCH
+========================= */
+      window.debounceSearch = function () {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          filterJobs();
+        }, 300);
+      };
+
+      /* =========================
+   🔄 LOAD JOBS
+========================= */
+      async function loadJobs() {
+        try {
+          console.log("📡 Loading jobs...");
+          const data = await api.get("jobs.php?action=list");
+
+          allJobs = data.jobs || [];
+          filteredJobs = [...allJobs];
+
+          console.log("✅ Jobs loaded:", allJobs.length);
+          sortAndRender();
+        } catch (err) {
+          console.error("❌ Load jobs failed:", err);
+        }
+      }
+
+      /* =========================
+   🧹 CLEAR FILTERS
+========================= */
+      window.clearAllFilters = function () {
+        document.getElementById("search-keyword").value = "";
+        document.getElementById("search-location").value = "";
+        document.getElementById("filter-category").value = "";
+        document.getElementById("filter-type").value = "";
+        
+
+        filteredJobs = [...allJobs];
+        sortAndRender();
+      };
+
+      /* =========================
+   🔍 FILTER JOBS
+========================= */
+      window.filterJobs = function () {
+        const keyword = document
+          .getElementById("search-keyword")
+          .value.toLowerCase();
+        const location = document
+          .getElementById("search-location")
+          .value.toLowerCase();
+        const category = document.getElementById("filter-category").value;
+        const type = document.getElementById("filter-type").value;
+        
+
+        console.log("🔍 Filtering with:", {
+          keyword,
+          location,
+          category,
+          type,
+          minSalary,
+          maxSalary,
+        });
+
+        filteredJobs = allJobs.filter((job) => {
+          return (
+            (!keyword || job.title.toLowerCase().includes(keyword)) &&
+            (!location ||
+              (job.location || "").toLowerCase().includes(location)) &&
+            (!category || job.category === category) &&
+            (!type || job.job_type === type) &&
+            (job.salary_min || 0) >= minSalary &&
+            (job.salary_max || Infinity) <= maxSalary
+          );
+        });
+
+        console.log("✅ Filtered jobs:", filteredJobs.length);
+        sortAndRender();
+      };
+
+      /* =========================
+   🔃 SORT + RENDER
+========================= */
+      window.sortAndRender = function () {
+        const sort = document.getElementById("sort-select").value;
+
+        if (sort === "salary_high") {
+          filteredJobs.sort(
+            (a, b) => (b.salary_max || 0) - (a.salary_max || 0),
+          );
+        } else {
+          filteredJobs.sort(
+            (a, b) => new Date(b.created_at) - new Date(a.created_at),
+          );
+        }
+
+        renderPublicJobs();
+      };
+
+      /* =========================
+   🧾 RENDER JOBS
+========================= */
+      function renderPublicJobs() {
+        const container = document.getElementById("tab-listings");
+
+        if (!filteredJobs.length) {
+          container.innerHTML = `
+      <div class="empty-state">
+        <h3>No jobs found</h3>
+      </div>`;
+          return;
+        }
+
+        container.innerHTML = filteredJobs
+          .map(
+            (job) => `
+    <div class="job-card">
+      <h3>${escapeHtml(job.title)}</h3>
+      <p><i class="fas fa-map-marker-alt"></i> ${escapeHtml(job.location || "Remote")}</p>
+      <p>${formatSalary(job.salary_min, job.salary_max)}</p>
+      <p>${statusBadge(job.status)}</p>
+      <small>${formatDate(job.created_at)}</small>
+    </div>
+  `,
+          )
+          .join("");
+
+        document.getElementById("results-count").innerText =
+          filteredJobs.length + " jobs found";
+      }
+
+      /* =========================
+   🚀 INIT
+========================= */
+      loadJobs();
+    </script>
+  </body>
+</html>

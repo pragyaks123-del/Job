@@ -1,0 +1,1217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>Employer Hub | Smart Job Portal</title>
+    <!-- Font Awesome 6 -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <!-- Google Fonts Poppins -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ===== ENHANCED MODERN CSS (COMPLETE & EXTENDED) ===== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #20b2aa;
+        --primary-dark: #178f88;
+        --primary-light: #e0f7f6;
+        --primary-xlight: #f0fafa;
+        --accent: #20b2aa;
+        --bg-base: #f7f9fc;
+        --bg-surface: #ffffff;
+        --bg-sidebar: #ffffff;
+        --text-pri: #0f172a;
+        --text-sec: #334155;
+        --text-muted: #64748b;
+        --border: #e4e9f2;
+        --border-md: #d0d8e8;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --info: #3b82f6;
+        --radius: 12px;
+        --radius-sm: 8px;
+        --radius-lg: 20px;
+        --radius-xl: 24px;
+        --radius-pill: 999px;
+        --shadow-sm:
+          0 2px 6px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
+        --shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.02);
+        --shadow-lg: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+        --transition: all 0.2s ease;
+        --font: "Poppins", sans-serif;
+      }
+
+      body {
+        font-family: var(--font);
+        background: var(--bg-base);
+        color: var(--text-pri);
+        font-size: 14px;
+        line-height: 1.5;
+        min-height: 100vh;
+      }
+
+      /* Typography refinements */
+      h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+      }
+      h2 {
+        font-size: 1.4rem;
+        font-weight: 600;
+      }
+      h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+      .text-muted {
+        color: var(--text-muted);
+      }
+      .text-primary {
+        color: var(--primary);
+      }
+
+      /* Navbar */
+      .navbar {
+        background: #ffffff;
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 110;
+        backdrop-filter: blur(2px);
+        box-shadow: var(--shadow-sm);
+      }
+      .navbar-inner {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 32px;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+      .logo {
+        font-size: 1.6rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .logo span {
+        color: var(--primary);
+        background: none;
+        -webkit-background-clip: unset;
+      }
+      .nav-links {
+        display: flex;
+        gap: 0.5rem;
+        flex: 1;
+      }
+      .nav-links a {
+        padding: 6px 18px;
+        border-radius: 40px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        transition: var(--transition);
+        color: var(--text-sec);
+        text-decoration: none;
+      }
+      .nav-links a:hover,
+      .nav-links a.active {
+        background: var(--primary-light);
+        color: var(--primary-dark);
+      }
+      .user-chip {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: var(--primary-xlight);
+        padding: 5px 16px 5px 8px;
+        border-radius: 40px;
+        font-weight: 500;
+      }
+      .user-avatar {
+        width: 34px;
+        height: 34px;
+        background: var(--primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+      }
+      .logout-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-sec);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 40px;
+        transition: var(--transition);
+      }
+      .logout-btn:hover {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
+      }
+
+      /* Page Layout */
+      .page-layout {
+        max-width: 1440px;
+        margin: 28px auto;
+        padding: 0 32px;
+        display: flex;
+        gap: 32px;
+        align-items: flex-start;
+      }
+      .sidebar {
+        width: 280px;
+        flex-shrink: 0;
+        background: var(--bg-surface);
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--border);
+        padding: 24px 16px;
+        position: sticky;
+        top: 96px;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+      }
+      .sidebar .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: var(--radius-lg);
+        font-weight: 500;
+        color: var(--text-sec);
+        transition: var(--transition);
+        margin-bottom: 8px;
+        cursor: pointer;
+        background: transparent;
+        border: none;
+        font-size: 0.9rem;
+      }
+      .sidebar .nav-item i {
+        width: 26px;
+        font-size: 1.1rem;
+      }
+      .sidebar .nav-item.active {
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        font-weight: 600;
+      }
+      .sidebar .nav-item:hover:not(.active) {
+        background: var(--bg-base);
+        color: var(--text-pri);
+      }
+      .badge-count {
+        background: var(--primary);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 40px;
+        margin-left: auto;
+      }
+      .main-content {
+        flex: 1;
+        min-width: 0;
+      }
+
+      /* Stats Grid & Cards */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      .stat-card {
+        background: var(--bg-surface);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        border: 1px solid var(--border);
+        transition: var(--transition);
+        text-align: center;
+      }
+      .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow);
+      }
+      .stat-icon {
+        font-size: 2rem;
+        color: var(--primary);
+        margin-bottom: 0.6rem;
+      }
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text-pri);
+        line-height: 1.2;
+      }
+      .stat-label {
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .card {
+        background: var(--bg-surface);
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--border);
+        margin-bottom: 1.8rem;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+      }
+      .card-header {
+        padding: 1.2rem 1.8rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th {
+        text-align: left;
+        padding: 1rem 1rem;
+        background: #f8fafd;
+        font-weight: 600;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        letter-spacing: 0.5px;
+      }
+      td {
+        padding: 1rem 1rem;
+        border-bottom: 1px solid var(--border);
+        vertical-align: middle;
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      /* Badges */
+      .badge {
+        display: inline-flex;
+        padding: 4px 14px;
+        border-radius: 40px;
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+      .badge-success {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .badge-warning {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .badge-danger {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .badge-secondary {
+        background: #e2e8f0;
+        color: #334155;
+      }
+
+      /* Buttons & actions */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 20px;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        transition: var(--transition);
+        cursor: pointer;
+        border: 1px solid transparent;
+        text-decoration: none;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+      .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+      }
+      .btn-outline {
+        background: white;
+        border-color: var(--border-md);
+        color: var(--text-sec);
+      }
+      .btn-outline:hover {
+        background: var(--bg-base);
+      }
+      .btn-sm {
+        padding: 5px 14px;
+        font-size: 0.7rem;
+      }
+      .action-icon {
+        background: none;
+        border: none;
+        font-size: 1rem;
+        margin: 0 4px;
+        cursor: pointer;
+        color: #5b6e8c;
+        transition: 0.2s;
+        padding: 6px;
+        border-radius: 40px;
+      }
+      .action-icon:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+      .action-icon.delete:hover {
+        background: #fee2e2;
+        color: var(--danger);
+      }
+
+      /* Applicant Cards */
+      .applicant-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        margin-bottom: 1.2rem;
+        transition: var(--transition);
+      }
+      .applicant-card:hover {
+        box-shadow: var(--shadow);
+        border-color: var(--primary-light);
+      }
+      .status-btn {
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        border: 1px solid var(--border-md);
+        background: white;
+        margin: 0 4px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .status-btn:hover {
+        background: var(--primary-light);
+      }
+
+      /* Modal refinements */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+      .modal-overlay.open {
+        display: flex;
+      }
+      .modal {
+        background: white;
+        border-radius: 28px;
+        max-width: 640px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+        box-shadow: var(--shadow-lg);
+      }
+      .modal-header,
+      .modal-footer {
+        padding: 1.2rem 1.8rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .modal-footer {
+        border-top: 1px solid var(--border);
+        justify-content: flex-end;
+        gap: 12px;
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .form-control {
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 14px;
+        border: 1.5px solid var(--border-md);
+        font-family: var(--font);
+        transition: var(--transition);
+      }
+      .form-control:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(32, 178, 170, 0.1);
+      }
+
+      /* Empty state */
+      .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--text-muted);
+      }
+      .hidden {
+        display: none !important;
+      }
+
+      /* Toast */
+      .toast-global {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #1e293b;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 60px;
+        font-weight: 500;
+        z-index: 1100;
+        animation: slideIn 0.2s ease;
+      }
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 980px) {
+        .page-layout {
+          flex-direction: column;
+        }
+        .sidebar {
+          width: 100%;
+          position: static;
+        }
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 640px) {
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+        .navbar-inner {
+          padding: 0 16px;
+          gap: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navbar-inner">
+        <a href="#" class="logo"
+          ><i class="fas fa-briefcase"></i> Job<span>Portal</span></a
+        >
+        <div class="nav-links" id="navLinks"></div>
+        <div id="navUserArea"></div>
+      </div>
+    </nav>
+
+    <div class="page-layout">
+      <aside class="sidebar">
+        <button class="nav-item active" data-tab="overview">
+          <i class="fas fa-chart-pie"></i> Dashboard
+        </button>
+        <button class="nav-item" data-tab="myjobs">
+          <i class="fas fa-briefcase"></i> My Jobs
+          <span id="sidebarJobBadge" class="badge-count">0</span>
+        </button>
+        <button class="nav-item" data-tab="applicants">
+          <i class="fas fa-users-viewfinder"></i> Review Applications
+        </button>
+        <button class="nav-item" id="postJobBtn">
+          <i class="fas fa-plus-circle"></i> Post New Job
+        </button>
+        <button class="nav-item" id="allListingsBtn">
+          <i class="fas fa-globe"></i> All Listings
+        </button>
+      </aside>
+
+      <div class="main-content">
+        <!-- OVERVIEW TAB -->
+        <div id="tab-overview" class="tab-content active">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 1.5rem;
+            "
+          >
+            <h1><i class="fas fa-chalkboard-user"></i> Employer Workspace</h1>
+            <button class="btn btn-primary" id="overviewPostBtn">
+              <i class="fas fa-plus"></i> Post a Job
+            </button>
+          </div>
+          <div class="stats-grid" id="statsGrid"></div>
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-table-list"></i> Recent job postings</h3>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Job title</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Applicants</th>
+                    <th>Posted</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="overviewTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- MY JOBS TAB -->
+        <div id="tab-myjobs" class="tab-content hidden">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 1.5rem;
+            "
+          >
+            <h1><i class="fas fa-pen-ruler"></i> My job listings</h1>
+            <button class="btn btn-primary" id="myjobsPostBtn">
+              <i class="fas fa-plus"></i> New Job
+            </button>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-list-ul"></i> Manage your openings</h3>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Job details</th>
+                    <th>Type</th>
+                    <th>Salary</th>
+                    <th>Status</th>
+                    <th>Applicants</th>
+                    <th>Posted</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="myjobsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- APPLICANTS TAB -->
+        <div id="tab-applicants" class="tab-content hidden">
+          <h1 style="margin-bottom: 1rem">
+            <i class="fas fa-address-card"></i> Candidate applications
+          </h1>
+          <div class="card">
+            <div class="card-body">
+              <label><i class="fas fa-filter"></i> Filter by job</label
+              ><select
+                id="jobSelect"
+                class="form-control"
+                style="max-width: 360px; margin-top: 6px"
+              >
+                <option value="">-- Select a position --</option>
+              </select>
+            </div>
+          </div>
+          <div id="applicantsContainer"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODALS -->
+    <div id="detailModal" class="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h3><i class="fas fa-info-circle"></i> Job details</h3>
+          <button class="modal-close" onclick="closeDetailModal()">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body" id="detailModalBody"></div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeDetailModal()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="editModal" class="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h3><i class="fas fa-edit"></i> Edit job</h3>
+          <button class="modal-close" onclick="closeEditModal()">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="editJobId" />
+          <div class="form-group">
+            <label>Job title</label
+            ><input id="editTitle" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Description</label
+            ><textarea id="editDesc" rows="4" class="form-control"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Category</label
+              ><select id="editCategory" class="form-control">
+                <option>Technology</option>
+                <option>Marketing</option>
+                <option>Finance</option>
+                <option>Design</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Job type</label
+              ><select id="editJobType" class="form-control">
+                <option value="full-time">Full-time</option>
+                <option value="part-time">Part-time</option>
+                <option value="contract">Contract</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Location</label
+            ><input id="editLocation" class="form-control" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Min salary ($)</label
+              ><input id="editSalaryMin" type="number" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label>Max salary ($)</label
+              ><input id="editSalaryMax" type="number" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Skills (comma separated)</label
+            ><input id="editSkills" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Status</label
+            ><select id="editStatus" class="form-control">
+              <option value="open">Open</option>
+              <option value="closed">Closed</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeEditModal()">
+            Cancel</button
+          ><button class="btn btn-primary" id="saveEditBtn">
+            Save changes
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="deleteModal" class="modal-overlay">
+      <div class="modal" style="max-width: 400px">
+        <div class="modal-header">
+          <h3><i class="fas fa-trash-can"></i> Confirm delete</h3>
+          <button class="modal-close" onclick="closeDeleteModal()">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Delete <strong id="deleteJobTitle"></strong>? All applications will
+            be removed permanently.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeDeleteModal()">
+            Cancel</button
+          ><button class="btn btn-danger" id="confirmDeleteBtn">
+            Delete forever
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      // Import utilities (assuming these exist, with fallbacks)
+      import {
+        api,
+        Auth,
+        escapeHtml,
+        formatSalary,
+        formatDate,
+        statusBadge,
+        showToast,
+      } from "../../Frontend/js/utils.js";
+
+      // Helper functions in case imports fail
+      window.showToast =
+        window.showToast ||
+        function (msg, type) {
+          const toast = document.createElement("div");
+          toast.className = `toast-global ${type === "success" ? "toast-success" : ""}`;
+          toast.innerText = msg;
+          document.body.appendChild(toast);
+          setTimeout(() => toast.remove(), 3000);
+        };
+      window.escapeHtml =
+        window.escapeHtml ||
+        function (str) {
+          if (!str) return "";
+          return str.replace(/[&<>]/g, function (m) {
+            if (m === "&") return "&amp;";
+            if (m === "<") return "&lt;";
+            if (m === ">") return "&gt;";
+            return m;
+          });
+        };
+      window.formatDate =
+        window.formatDate ||
+        function (d) {
+          if (!d) return "N/A";
+          return new Date(d).toLocaleDateString();
+        };
+      window.statusBadge =
+        window.statusBadge ||
+        function (s) {
+          if (s === "open")
+            return '<span class="badge badge-success">Open</span>';
+          if (s === "closed")
+            return '<span class="badge badge-danger">Closed</span>';
+          return `<span class="badge badge-secondary">${s}</span>`;
+        };
+      window.formatSalary =
+        window.formatSalary ||
+        function (min, max) {
+          if (!min && !max) return "Not specified";
+          if (min && max) return `$${min} - $${max}`;
+          if (min) return `$${min}+`;
+          return `$${max}`;
+        };
+
+      // Get authenticated user - no test employer, real auth
+      const user = Auth.getUser();
+      if (!user || user.role !== "employer") {
+        // redirect to login if not authenticated as employer
+        location.href = "login.html";
+      }
+
+      // Render navigation with working logout button
+      document.getElementById("navLinks").innerHTML =
+        `<a href="employer-dashboard.html" class="active"><i class="fas fa-chart-line"></i> Dashboard</a><a href="job-listings.html"><i class="fas fa-search"></i> Explore jobs</a>`;
+      document.getElementById("navUserArea").innerHTML = `
+      <div class="user-chip">
+        <div class="user-avatar">${user ? escapeHtml(user.name.charAt(0)) : "E"}</div>
+        <span>${user ? escapeHtml(user.name) : "Employer"}</span>
+        <button class="logout-btn" id="realLogoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    `;
+
+      // Add logout functionality
+      document
+        .getElementById("realLogoutBtn")
+        ?.addEventListener("click", () => {
+          if (Auth && Auth.logout) {
+            Auth.logout();
+          } else {
+            localStorage.removeItem("jobportal_user");
+            sessionStorage.clear();
+          }
+          location.href = "login.html";
+        });
+
+      let jobsList = [];
+      let pendingDeleteId = null;
+
+      async function fetchJobs() {
+        try {
+          const data = await api.get("jobs.php?action=my");
+          if (data.error) throw new Error(data.error);
+          jobsList = data.jobs || [];
+        } catch (e) {
+          // fallback mock for demo when API not ready
+          const stored = localStorage.getItem("employer_mock_jobs");
+          if (stored) jobsList = JSON.parse(stored);
+          else {
+            jobsList = [
+              {
+                id: 101,
+                title: "Senior Frontend Developer",
+                job_type: "full-time",
+                status: "open",
+                location: "Remote",
+                salary_min: 80000,
+                salary_max: 120000,
+                skills: "React, TypeScript",
+                category: "Technology",
+                description: "Build amazing products.",
+                created_at: new Date().toISOString(),
+                applicant_count: 4,
+              },
+              {
+                id: 102,
+                title: "Marketing Manager",
+                job_type: "full-time",
+                status: "open",
+                location: "New York",
+                salary_min: 70000,
+                salary_max: 95000,
+                skills: "SEO, Analytics",
+                category: "Marketing",
+                description: "Lead campaigns.",
+                created_at: new Date(Date.now() - 86400000).toISOString(),
+                applicant_count: 2,
+              },
+            ];
+          }
+        }
+        const total = jobsList.length,
+          openCount = jobsList.filter((j) => j.status === "open").length;
+        const totalApps = jobsList.reduce(
+          (sum, j) => sum + (j.applicant_count || 0),
+          0,
+        );
+        document.getElementById("sidebarJobBadge").innerText = total;
+        document.getElementById("statsGrid").innerHTML = `
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-briefcase"></i></div><div class="stat-value">${total}</div><div class="stat-label">Total jobs</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-door-open"></i></div><div class="stat-value">${openCount}</div><div class="stat-label">Open positions</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-value">${totalApps}</div><div class="stat-label">Total applicants</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-hourglass-half"></i></div><div class="stat-value">${totalApps}</div><div class="stat-label">Pending review</div></div>
+      `;
+        renderOverviewTable(jobsList);
+        renderMyJobsTable(jobsList);
+        populateJobSelect();
+        localStorage.setItem("employer_mock_jobs", JSON.stringify(jobsList));
+      }
+
+      function renderOverviewTable(jobs) {
+        const tbody = document.getElementById("overviewTableBody");
+        if (!jobs.length) {
+          tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><i class="fas fa-folder-open"></i><h3>No jobs yet</h3><button class="btn btn-primary" id="emptyPostBtn">Post your first job</button></div></td></tr>`;
+          document
+            .getElementById("emptyPostBtn")
+            ?.addEventListener(
+              "click",
+              () => (location.href = "post-job.html"),
+            );
+          return;
+        }
+        tbody.innerHTML = jobs
+          .map(
+            (job) => `
+        <tr>
+          <td><strong>${escapeHtml(job.title)}</strong><br><small><i class="fas fa-map-marker-alt"></i> ${escapeHtml(job.location || "Remote")}</small></td>
+          <td><span class="badge badge-secondary">${escapeHtml(job.job_type)}</span></td>
+          <td>${statusBadge(job.status)}</td>
+          <td><span class="badge badge-success" style="cursor:pointer" onclick="viewApplicantsByJobId(${job.id})"><i class="fas fa-users"></i> ${job.applicant_count || 0}</span></td>
+          <td>${formatDate(job.created_at)}</td>
+          <td><button class="btn btn-sm btn-outline" onclick="openJobDetail(${job.id})"><i class="fas fa-eye"></i> Details</button></td>
+        </tr>
+      `,
+          )
+          .join("");
+      }
+
+      function renderMyJobsTable(jobs) {
+        const tbody = document.getElementById("myjobsTableBody");
+        if (!jobs.length) {
+          tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><i class="fas fa-file-alt"></i><h3>No postings yet</h3><button class="btn btn-primary" id="emptyMyJobsPost">Create new job</button></div></td></tr>`;
+          document
+            .getElementById("emptyMyJobsPost")
+            ?.addEventListener(
+              "click",
+              () => (location.href = "post-job.html"),
+            );
+          return;
+        }
+        tbody.innerHTML = jobs
+          .map(
+            (job) => `
+        <tr>
+          <td><strong>${escapeHtml(job.title)}</strong><br><small>${escapeHtml(job.location || "Anywhere")}</small></td>
+          <td><span class="badge badge-secondary">${escapeHtml(job.job_type)}</span></td>
+          <td>${formatSalary(job.salary_min, job.salary_max)}</td>
+          <td>${statusBadge(job.status)}</td>
+          <td><span class="badge badge-success" style="cursor:pointer" onclick="viewApplicantsByJobId(${job.id})">${job.applicant_count || 0} applied</span></td>
+          <td>${formatDate(job.created_at)}</td>
+          <td>
+            <button class="action-icon" onclick="openJobDetail(${job.id})"><i class="fas fa-eye"></i></button>
+            <button class="action-icon" onclick="openEditJobModal(${job.id})"><i class="fas fa-pen"></i></button>
+            <button class="action-icon delete" onclick="openDeleteJobModal(${job.id}, '${escapeHtml(job.title)}')"><i class="fas fa-trash"></i></button>
+           </td>
+        </tr>
+      `,
+          )
+          .join("");
+      }
+
+      function populateJobSelect() {
+        const select = document.getElementById("jobSelect");
+        select.innerHTML =
+          '<option value="">-- Choose a job to review --</option>' +
+          jobsList
+            .map(
+              (j) =>
+                `<option value="${j.id}">${escapeHtml(j.title)} (${j.applicant_count || 0} applicants)</option>`,
+            )
+            .join("");
+      }
+
+      window.viewApplicantsByJobId = (jobId) => {
+        switchTab("applicants");
+        document.getElementById("jobSelect").value = jobId;
+        loadApplicantsList();
+      };
+
+      async function loadApplicantsList() {
+        const jobId = document.getElementById("jobSelect").value;
+        const container = document.getElementById("applicantsContainer");
+        if (!jobId) {
+          container.innerHTML = `<div class="empty-state"><i class="fas fa-hand-pointer"></i><h3>Select a job to see applicants</h3></div>`;
+          return;
+        }
+        let storedApps = localStorage.getItem(`applicants_job_${jobId}`);
+        let apps = [];
+        if (storedApps) apps = JSON.parse(storedApps);
+        else {
+          if (jobId == 101)
+            apps = [
+              {
+                id: 1,
+                name: "Alice Johnson",
+                email: "alice@example.com",
+                status: "pending",
+                applied_at: new Date().toISOString(),
+                phone: "1234567890",
+                cover_letter: "Passionate about frontend.",
+              },
+              {
+                id: 2,
+                name: "Bob Smith",
+                email: "bob@example.com",
+                status: "accepted",
+                applied_at: new Date().toISOString(),
+                cover_letter: "Experienced React dev.",
+              },
+            ];
+          else if (jobId == 102)
+            apps = [
+              {
+                id: 3,
+                name: "Clara Lee",
+                email: "clara@example.com",
+                status: "pending",
+                applied_at: new Date().toISOString(),
+                cover_letter: "Marketing expert with 5 years.",
+              },
+            ];
+          else apps = [];
+          localStorage.setItem(`applicants_job_${jobId}`, JSON.stringify(apps));
+        }
+        if (!apps.length) {
+          container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><h3>No applications yet</h3><p>Share the job link to attract candidates</p></div>`;
+          return;
+        }
+        container.innerHTML = apps
+          .map(
+            (app) => `
+        <div class="applicant-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+            <div><i class="fas fa-user-circle fa-lg"></i> <strong>${escapeHtml(app.name)}</strong><br><small>${escapeHtml(app.email)}</small></div>
+            <div>${statusBadge(app.status)}</div>
+          </div>
+          <div style="margin-top: 12px;"><i class="fas fa-calendar-alt"></i> Applied: ${formatDate(app.applied_at)} ${app.phone ? `<span style="margin-left:12px;"><i class="fas fa-phone"></i> ${escapeHtml(app.phone)}</span>` : ""}</div>
+          ${app.cover_letter ? `<div style="background: var(--bg-base); padding: 12px; border-radius: 16px; margin: 12px 0;"><i class="fas fa-comment"></i> ${escapeHtml(app.cover_letter)}</div>` : ""}
+          <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap:wrap;">
+            <button class="status-btn" onclick="updateAppStatus(${app.id}, 'pending', this, ${jobId})"><i class="fas fa-hourglass"></i> Pending</button>
+            <button class="status-btn" onclick="updateAppStatus(${app.id}, 'accepted', this, ${jobId})"><i class="fas fa-check-circle"></i> Accept</button>
+            <button class="status-btn" onclick="updateAppStatus(${app.id}, 'rejected', this, ${jobId})"><i class="fas fa-times-circle"></i> Reject</button>
+          </div>
+        </div>
+      `,
+          )
+          .join("");
+      }
+
+      window.updateAppStatus = async (appId, status, btn, jobId) => {
+        const storedApps = localStorage.getItem(`applicants_job_${jobId}`);
+        if (storedApps) {
+          let apps = JSON.parse(storedApps);
+          const appIndex = apps.findIndex((a) => a.id == appId);
+          if (appIndex !== -1) apps[appIndex].status = status;
+          localStorage.setItem(`applicants_job_${jobId}`, JSON.stringify(apps));
+        }
+        showToast(`Application status changed to ${status}`, "success");
+        loadApplicantsList();
+        fetchJobs();
+      };
+
+      window.openJobDetail = (id) => {
+        const job = jobsList.find((j) => j.id == id);
+        if (!job) return;
+        document.getElementById("detailModalBody").innerHTML = `
+        <div><h3>${escapeHtml(job.title)}</h3><p><i class="fas fa-building"></i> ${escapeHtml(job.category || "General")} · ${escapeHtml(job.job_type)}</p>
+        <div style="background:#f8fafc; padding:12px; border-radius:16px; margin:12px 0;"><i class="fas fa-map-pin"></i> ${escapeHtml(job.location || "Remote")}  |  💰 ${formatSalary(job.salary_min, job.salary_max)}</div>
+        <p><strong>Description</strong><br>${escapeHtml(job.description)}</p>
+        <p><strong>Skills required:</strong> ${escapeHtml(job.skills || "Not specified")}</p>
+        <hr><small>Posted ${formatDate(job.created_at)} · Status: ${statusBadge(job.status)}</small></div>
+      `;
+        document.getElementById("detailModal").classList.add("open");
+      };
+      window.closeDetailModal = () =>
+        document.getElementById("detailModal").classList.remove("open");
+
+      window.openEditJobModal = (id) => {
+        const job = jobsList.find((j) => j.id == id);
+        if (!job) return;
+        document.getElementById("editJobId").value = job.id;
+        document.getElementById("editTitle").value = job.title;
+        document.getElementById("editDesc").value = job.description;
+        document.getElementById("editCategory").value =
+          job.category || "Technology";
+        document.getElementById("editJobType").value =
+          job.job_type || "full-time";
+        document.getElementById("editLocation").value = job.location || "";
+        document.getElementById("editSalaryMin").value = job.salary_min || "";
+        document.getElementById("editSalaryMax").value = job.salary_max || "";
+        document.getElementById("editSkills").value = job.skills || "";
+        document.getElementById("editStatus").value = job.status || "open";
+        document.getElementById("editModal").classList.add("open");
+      };
+      window.closeEditModal = () =>
+        document.getElementById("editModal").classList.remove("open");
+      document.getElementById("saveEditBtn").onclick = async () => {
+        const id = parseInt(document.getElementById("editJobId").value);
+        const index = jobsList.findIndex((j) => j.id === id);
+        if (index !== -1) {
+          jobsList[index] = {
+            ...jobsList[index],
+            title: document.getElementById("editTitle").value,
+            description: document.getElementById("editDesc").value,
+            category: document.getElementById("editCategory").value,
+            job_type: document.getElementById("editJobType").value,
+            location: document.getElementById("editLocation").value,
+            salary_min:
+              parseFloat(document.getElementById("editSalaryMin").value) || 0,
+            salary_max:
+              parseFloat(document.getElementById("editSalaryMax").value) || 0,
+            skills: document.getElementById("editSkills").value,
+            status: document.getElementById("editStatus").value,
+          };
+          localStorage.setItem("employer_mock_jobs", JSON.stringify(jobsList));
+          showToast("Job updated successfully", "success");
+          closeEditModal();
+          fetchJobs();
+        }
+      };
+
+      window.openDeleteJobModal = (id, title) => {
+        pendingDeleteId = id;
+        document.getElementById("deleteJobTitle").innerText = title;
+        document.getElementById("deleteModal").classList.add("open");
+      };
+      window.closeDeleteModal = () =>
+        document.getElementById("deleteModal").classList.remove("open");
+      document.getElementById("confirmDeleteBtn").onclick = async () => {
+        if (!pendingDeleteId) return;
+        jobsList = jobsList.filter((j) => j.id !== pendingDeleteId);
+        localStorage.setItem("employer_mock_jobs", JSON.stringify(jobsList));
+        showToast("Job removed", "success");
+        closeDeleteModal();
+        fetchJobs();
+      };
+
+      function switchTab(tab) {
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((el) => el.classList.add("hidden"));
+        document.getElementById(`tab-${tab}`).classList.remove("hidden");
+        document
+          .querySelectorAll(".sidebar .nav-item")
+          .forEach((btn) => btn.classList.remove("active"));
+        document
+          .querySelector(`.sidebar .nav-item[data-tab="${tab}"]`)
+          .classList.add("active");
+        if (tab === "applicants") loadApplicantsList();
+      }
+      document
+        .querySelectorAll(".sidebar .nav-item[data-tab]")
+        .forEach((btn) =>
+          btn.addEventListener("click", () => switchTab(btn.dataset.tab)),
+        );
+      document.getElementById("postJobBtn").onclick = () =>
+        (location.href = "post-job.html");
+      document.getElementById("allListingsBtn").onclick = () =>
+        (location.href = "job-listings.html");
+      document.getElementById("overviewPostBtn").onclick = () =>
+        (location.href = "post-job.html");
+      document.getElementById("myjobsPostBtn").onclick = () =>
+        (location.href = "post-job.html");
+      document
+        .getElementById("jobSelect")
+        .addEventListener("change", () => loadApplicantsList());
+
+      window.switchTab = switchTab;
+      fetchJobs();
+    </script>
+  </body>
+</html>

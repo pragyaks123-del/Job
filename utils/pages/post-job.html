@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post a Job — Smart Job Portal</title>
+    <link rel="stylesheet" href="../../Frontend/css/main.css" />
+  </head>
+  <body class="page-wrapper">
+    <nav class="navbar">
+      <div class="navbar-inner">
+        <a href="index.html" class="logo">Job<span>Portal</span></a>
+        <div class="nav-links" id="nav-links"></div>
+        <div class="nav-actions" id="nav-actions"></div>
+      </div>
+    </nav>
+
+    <main>
+      <div class="container" style="max-width: 720px">
+        <div class="page-header">
+          <h1>Job Posting (Employer)</h1>
+          <p class="text-sec">
+            Fill in the details to attract the best candidates
+          </p>
+        </div>
+
+        <div id="page-alert"></div>
+
+        <div class="card">
+          <form id="post-job-form">
+            <!-- Job Title -->
+            <div class="form-group">
+              <label class="form-label">Job Title *</label>
+              <input
+                type="text"
+                id="title"
+                class="form-control"
+                placeholder="e.g. Senior Frontend Developer"
+                required
+              />
+            </div>
+
+            <!-- Job Description -->
+            <div class="form-group">
+              <label class="form-label">Job Description *</label>
+              <textarea
+                id="description"
+                class="form-control"
+                rows="8"
+                placeholder="Describe responsibilities, requirements, company culture…"
+                required
+              ></textarea>
+            </div>
+
+            <!-- Category & Job Type -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Category</label>
+                <select id="category" class="form-control">
+                  <option value="">Select category…</option>
+                  <option>Technology</option>
+                  <option>Marketing</option>
+                  <option>Finance</option>
+                  <option>Design</option>
+                  <option>Engineering</option>
+                  <option>Healthcare</option>
+                  <option>Education</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Job Type</label>
+                <select id="job_type" class="form-control">
+                  <option value="full-time">Full Time</option>
+                  <option value="part-time">Part Time</option>
+                  <option value="contract">Contract</option>
+                  <option value="internship">Internship</option>
+                  <option value="remote">Remote</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Location -->
+            <div class="form-group">
+              <label class="form-label">Location</label>
+              <input
+                type="text"
+                id="location"
+                class="form-control"
+                placeholder="e.g. New York, NY or Remote"
+              />
+            </div>
+
+            <!-- Salary -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Minimum Salary ($/yr)</label>
+                <input
+                  type="number"
+                  id="salary_min"
+                  class="form-control"
+                  placeholder="e.g. 60000"
+                  min="0"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Maximum Salary ($/yr)</label>
+                <input
+                  type="number"
+                  id="salary_max"
+                  class="form-control"
+                  placeholder="e.g. 90000"
+                  min="0"
+                />
+              </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="form-group">
+              <label class="form-label">Required Skills</label>
+              <input
+                type="text"
+                id="skills"
+                class="form-control"
+                placeholder="e.g. React, Node.js, PostgreSQL (comma-separated)"
+              />
+              <div class="form-hint">
+                Separate skills with commas. This helps candidates find your
+                job.
+              </div>
+            </div>
+
+            <!-- Buttons -->
+            <div
+              style="
+                display: flex;
+                gap: 12px;
+                justify-content: flex-end;
+                padding-top: 8px;
+              "
+            >
+              <a href="employer-dashboard.html" class="btn btn-outline"
+                >Cancel</a
+              >
+              <button type="submit" class="btn btn-primary" id="post-btn">
+                🚀 Post Job
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <!-- ─ Scripts  -->
+
+    <!-- Auth library (must be first) -->
+    <script type="module" src="../../Frontend/js/utils.js"></script>
+
+    <!-- Inline page-specific script -->
+    <script>
+      document
+        .getElementById("post-job-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("post-btn");
+          btn.disabled = true;
+          btn.textContent = "Posting…";
+
+          const payload = {
+            title: document.getElementById("title").value,
+            description: document.getElementById("description").value,
+            category: document.getElementById("category").value,
+            job_type: document.getElementById("job_type").value,
+            location: document.getElementById("location").value,
+            salary_min: document.getElementById("salary_min").value || 0,
+            salary_max: document.getElementById("salary_max").value || 0,
+            skills: document.getElementById("skills").value,
+          };
+
+          try {
+            // Direct POST to create job
+            const res = await fetch("../../helper/api/jobs.php?action=create", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+
+            const data = await res.json();
+            if (data.error) throw new Error(data.error);
+
+            alert("Job post sucessfully");
+            window.location.href = "job-listings.html";
+          } catch (err) {
+            alert("Error: " + err.message);
+            btn.disabled = false;
+            btn.textContent = "Post Job";
+          }
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Applications - Employer</title>
+    <link rel="stylesheet" href="notifications.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'DM Sans','Segoe UI',sans-serif; background: #eef0f4; min-height: 100vh; }
+        nav { background: #0984e3; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+        nav .brand { color: white; font-weight: 700; font-size: 1.1rem; }
+        nav .nav-links { display: flex; gap: 6px; }
+        nav a { color: rgba(255,255,255,0.85); text-decoration: none; padding: 6px 13px; border-radius: 6px; font-size: 0.86rem; font-weight: 500; transition: background 0.2s; }
+        nav a:hover, nav a.active { background: rgba(255,255,255,0.2); color: white; }
+        .page { max-width: 1000px; margin: 0 auto; padding: 28px 20px; }
+        .page-title { font-size: 1.4rem; font-weight: 700; color: #222; margin-bottom: 4px; }
+        .page-sub { font-size: 0.88rem; color: #888; margin-bottom: 24px; }
+        .stats-bar { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+        .stat-card { background: white; border-radius: 10px; padding: 14px 20px; flex: 1; min-width: 100px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.07); cursor: pointer; border: 2px solid transparent; transition: border-color 0.2s; }
+        .stat-card:hover, .stat-card.active { border-color: #0984e3; }
+        .stat-num { font-size: 1.6rem; font-weight: 700; color: #0984e3; }
+        .stat-label { font-size: 0.74rem; color: #888; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+        .stat-card.s-pending .stat-num { color: #856404; }
+        .stat-card.s-reviewed .stat-num { color: #004085; }
+        .stat-card.s-accepted .stat-num { color: #155724; }
+        .stat-card.s-rejected .stat-num { color: #721c24; }
+        .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+        .tab-group { display: flex; gap: 6px; flex-wrap: wrap; }
+        .tab-btn { background: white; border: 1.5px solid #dde1e7; padding: 7px 15px; border-radius: 20px; font-family: inherit; font-size: 0.83rem; font-weight: 600; cursor: pointer; color: #555; transition: all 0.2s; }
+        .tab-btn:hover { border-color: #0984e3; color: #0984e3; }
+        .tab-btn.active { background: #0984e3; border-color: #0984e3; color: white; }
+        .toolbar-right { display: flex; gap: 8px; align-items: center; }
+        .search-input { padding: 8px 12px; border: 1.5px solid #dde1e7; border-radius: 7px; font-family: inherit; font-size: 0.88rem; outline: none; width: 210px; transition: border-color 0.2s; }
+        .search-input:focus { border-color: #0984e3; }
+        .refresh-btn { background: #0984e3; color: white; border: none; padding: 8px 16px; border-radius: 7px; font-family: inherit; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .refresh-btn:hover { background: #076bbf; }
+        #app-list { display: flex; flex-direction: column; gap: 12px; }
+        .app-card { background: white; padding: 18px 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; border-left: 4px solid #dde1e7; transition: box-shadow 0.2s; }
+        .app-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.11); }
+        .app-card.b-pending { border-left-color: #ffc107; }
+        .app-card.b-reviewed { border-left-color: #0984e3; }
+        .app-card.b-accepted { border-left-color: #00b894; }
+        .app-card.b-rejected { border-left-color: #d63031; }
+        .app-info { flex: 1; min-width: 220px; }
+        .applicant-name { font-size: 1rem; font-weight: 700; color: #222; margin-bottom: 3px; }
+        .job-name { font-size: 0.86rem; color: #0984e3; font-weight: 600; margin-bottom: 4px; }
+        .app-meta { font-size: 0.81rem; color: #777; margin-bottom: 8px; }
+        .cover-preview { font-size: 0.82rem; color: #555; background: #f7f8fa; padding: 8px 12px; border-radius: 6px; line-height: 1.55; border-left: 3px solid #dde1e7; margin-top: 4px; max-width: 480px; }
+        .app-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+        .status-badge { padding: 5px 14px; border-radius: 20px; font-size: 0.76rem; font-weight: 700; text-transform: capitalize; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-reviewed { background: #cce5ff; color: #004085; }
+        .status-accepted { background: #d4edda; color: #155724; }
+        .status-rejected { background: #f8d7da; color: #721c24; }
+        .app-date { font-size: 0.75rem; color: #aaa; }
+        .action-btns { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+        .btn-review, .btn-accept, .btn-reject, .btn-reset { padding: 7px 13px; border-radius: 6px; font-family: inherit; font-size: 0.81rem; font-weight: 600; cursor: pointer; }
+        .btn-review { background: #0984e3; color: white; border: none; }
+        .btn-accept { background: #00b894; color: white; border: none; }
+        .btn-reject { background: white; color: #d63031; border: 1.5px solid #d63031; }
+        .btn-reset { background: white; color: #856404; border: 1.5px solid #ffc107; }
+        .resume-link { font-size: 0.78rem; color: #0984e3; text-decoration: none; font-weight: 500; }
+        .resume-link:hover { text-decoration: underline; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #aaa; }
+        .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+        .toast { position: fixed; bottom: 24px; right: 24px; background: #222; color: white; padding: 12px 20px; border-radius: 8px; font-size: 0.88rem; font-weight: 500; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; }
+        .toast.show { opacity: 1; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+        .modal-overlay.show { opacity: 1; pointer-events: all; }
+        .modal { background: white; border-radius: 12px; padding: 28px 28px 24px; max-width: 400px; width: 90%; box-shadow: 0 8px 32px rgba(0,0,0,0.18); transform: scale(0.95); transition: transform 0.2s; }
+        .modal-overlay.show .modal { transform: scale(1); }
+        .modal h3 { font-size: 1.05rem; color: #222; margin-bottom: 10px; }
+        .modal p { font-size: 0.88rem; color: #666; margin-bottom: 20px; line-height: 1.5; }
+        .modal-btns { display: flex; gap: 10px; justify-content: flex-end; }
+        .modal-cancel { background: white; border: 1.5px solid #dde1e7; padding: 8px 18px; border-radius: 7px; font-family: inherit; font-size: 0.88rem; font-weight: 600; cursor: pointer; color: #555; }
+        .modal-confirm { border: none; padding: 8px 20px; border-radius: 7px; font-family: inherit; font-size: 0.88rem; font-weight: 700; cursor: pointer; color: white; }
+        .c-accept { background: #00b894; }
+        .c-reject { background: #d63031; }
+        .c-review { background: #0984e3; }
+        .c-reset { background: #e67e22; }
+    </style>
+</head>
+<body>
+    <nav>
+        <span class="brand">Smart Job Portal</span>
+        <div class="nav-links">
+            <a href="index.html">Jobs</a>
+            <a href="my_applications.html">My Applications</a>
+            <a href="resume.html">My Resume</a>
+            <a href="employer.html">Dashboard</a>
+            <a href="employer_my_applications.html" class="active">All Applications</a>
+        </div>
+    </nav>
+    <div class="page">
+        <div class="page-title">All Applications</div>
+        <p class="page-sub">Review, accept, or reject applications across all your job listings.</p>
+        <div class="stats-bar">
+            <div class="stat-card active" id="sc-all" onclick="filterByStatus('')"><div class="stat-num" id="st-total">-</div><div class="stat-label">Total</div></div>
+            <div class="stat-card s-pending" id="sc-pending" onclick="filterByStatus('pending')"><div class="stat-num" id="st-pending">-</div><div class="stat-label">Pending</div></div>
+            <div class="stat-card s-reviewed" id="sc-reviewed" onclick="filterByStatus('reviewed')"><div class="stat-num" id="st-reviewed">-</div><div class="stat-label">Reviewed</div></div>
+            <div class="stat-card s-accepted" id="sc-accepted" onclick="filterByStatus('accepted')"><div class="stat-num" id="st-accepted">-</div><div class="stat-label">Accepted</div></div>
+            <div class="stat-card s-rejected" id="sc-rejected" onclick="filterByStatus('rejected')"><div class="stat-num" id="st-rejected">-</div><div class="stat-label">Rejected</div></div>
+        </div>
+        <div class="toolbar">
+            <div class="tab-group">
+                <button class="tab-btn active" id="tab-all" onclick="filterByStatus('')">All</button>
+                <button class="tab-btn" id="tab-pending" onclick="filterByStatus('pending')">Pending</button>
+                <button class="tab-btn" id="tab-reviewed" onclick="filterByStatus('reviewed')">Reviewed</button>
+                <button class="tab-btn" id="tab-accepted" onclick="filterByStatus('accepted')">Accepted</button>
+                <button class="tab-btn" id="tab-rejected" onclick="filterByStatus('rejected')">Rejected</button>
+            </div>
+            <div class="toolbar-right">
+                <input class="search-input" type="text" id="search-box" placeholder="Search name or job..." oninput="applySearch()">
+                <button class="refresh-btn" onclick="loadAll()">Refresh</button>
+            </div>
+        </div>
+        <div id="app-list">
+            <div class="empty-state"><div class="icon">...</div><p>Loading applications...</p></div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <h3 id="modal-title">Confirm Action</h3>
+            <p id="modal-body">Are you sure?</p>
+            <div class="modal-btns">
+                <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-confirm" id="modal-btn" onclick="confirmAction()">Confirm</button>
+            </div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script>
+        let allApps = [];
+        let activeStatus = '';
+        let pendingId = null;
+        let pendingStatus = null;
+        async function loadAll() {
+            try {
+                const res = await fetch('employer_all_application.php?employer_id=1');
+                if (!res.ok) throw new Error('Server error');
+                allApps = await res.json();
+                updateStats(allApps);
+                render(filtered());
+            } catch (e) {
+                document.getElementById('app-list').innerHTML = '<div class="empty-state"><div class="icon">!</div><p>Failed to load. Check server.</p></div>';
+            }
+        }
+        function updateStats(apps) {
+            document.getElementById('st-total').textContent = apps.length;
+            document.getElementById('st-pending').textContent = apps.filter(a => a.status === 'pending').length;
+            document.getElementById('st-reviewed').textContent = apps.filter(a => a.status === 'reviewed').length;
+            document.getElementById('st-accepted').textContent = apps.filter(a => a.status === 'accepted').length;
+            document.getElementById('st-rejected').textContent = apps.filter(a => a.status === 'rejected').length;
+        }
+        function filtered() {
+            const q = document.getElementById('search-box').value.toLowerCase();
+            return allApps.filter(a => {
+                const matchStatus = !activeStatus || a.status === activeStatus;
+                const matchSearch = !q || (a.applicant_name || '').toLowerCase().includes(q) || (a.job_title || '').toLowerCase().includes(q) || (a.applicant_email || '').toLowerCase().includes(q);
+                return matchStatus && matchSearch;
+            });
+        }
+        function filterByStatus(status) {
+            activeStatus = status;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + (status || 'all')).classList.add('active');
+            document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+            document.getElementById('sc-' + (status || 'all')).classList.add('active');
+            render(filtered());
+        }
+        function applySearch() { render(filtered()); }
+        function render(apps) {
+            const list = document.getElementById('app-list');
+            if (!apps.length) {
+                list.innerHTML = '<div class="empty-state"><div class="icon">-</div><p>No applications found.</p></div>';
+                return;
+            }
+            list.innerHTML = apps.map(app => {
+                const date = app.applied_at ? new Date(app.applied_at).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) : 'N/A';
+                const resumeHtml = app.resume_path ? `<a class="resume-link" href="${app.resume_path}" target="_blank">View Resume</a>` : '';
+                const coverHtml = app.cover_letter ? `<div class="cover-preview">${app.cover_letter}</div>` : '';
+                let btns = '';
+                if (app.status !== 'reviewed') btns += `<button class="btn-review" onclick="ask(${app.id},'reviewed')">Review</button>`;
+                if (app.status !== 'accepted') btns += `<button class="btn-accept" onclick="ask(${app.id},'accepted')">Accept</button>`;
+                if (app.status !== 'rejected') btns += `<button class="btn-reject" onclick="ask(${app.id},'rejected')">Reject</button>`;
+                if (app.status !== 'pending') btns += `<button class="btn-reset" onclick="ask(${app.id},'pending')">Reset</button>`;
+                return `
+                <div class="app-card b-${app.status}" id="card-${app.id}">
+                    <div class="app-info">
+                        <div class="applicant-name">${app.applicant_name || 'Applicant #' + app.user_id}</div>
+                        <div class="job-name">${app.job_title || 'N/A'}</div>
+                        <div class="app-meta">${app.applicant_email || 'N/A'} | Applied: ${date}</div>
+                        ${coverHtml}
+                    </div>
+                    <div class="app-actions">
+                        <span class="status-badge status-${app.status}" id="badge-${app.id}">${app.status}</span>
+                        <span class="app-date">${date}</span>
+                        <div class="action-btns">${btns}</div>
+                        ${resumeHtml}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+        const modalInfo = {
+            accepted: { title: 'Accept Application', body: 'Accept this applicant for the role?', cls: 'c-accept' },
+            rejected: { title: 'Reject Application', body: 'Reject this application? The status will be set to rejected.', cls: 'c-reject' },
+            reviewed: { title: 'Mark as Reviewed', body: 'Mark this application as reviewed?', cls: 'c-review' },
+            pending: { title: 'Reset to Pending', body: 'Reset this application back to pending?', cls: 'c-reset' }
+        };
+        function ask(appId, newStatus) {
+            pendingId = appId;
+            pendingStatus = newStatus;
+            const info = modalInfo[newStatus];
+            document.getElementById('modal-title').textContent = info.title;
+            document.getElementById('modal-body').textContent = info.body;
+            document.getElementById('modal-btn').className = 'modal-confirm ' + info.cls;
+            document.getElementById('modal-overlay').classList.add('show');
+        }
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('show');
+            pendingId = pendingStatus = null;
+        }
+        async function confirmAction() {
+            if (!pendingId || !pendingStatus) return;
+            const id = pendingId;
+            const status = pendingStatus;
+            closeModal();
+            try {
+                const res = await fetch('update_status.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ app_id: id, new_status: status })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    const app = allApps.find(a => a.id == id);
+                    if (app) app.status = status;
+                    updateStats(allApps);
+                    render(filtered());
+                    showToast('Status updated to ' + status);
+                } else {
+                    showToast(result.message || 'Update failed.');
+                }
+            } catch (e) {
+                showToast('Failed to update status.');
+            }
+        }
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+        document.getElementById('modal-overlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        window.onload = loadAll;
+    </script>
+    <script>
+        window.NOTIFICATION_CONTEXT = { role: 'employer', recipientId: 1 };
+    </script>
+    <script src="notifications.js"></script>
+</body>
+</html>

@@ -2,9 +2,9 @@
 // backend/includes/helpers.php
 // Shared utility functions
 
-require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/databse.php';
 
-// ── Session ──────────────────────────────────────────────────
+// ── Session 
 function startSession() {
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
@@ -27,7 +27,7 @@ function requireAuth($role = null) {
     return $user;
 }
 
-// ── JSON Responses ────────────────────────────────────────────
+//  JSON Responses 
 function jsonResponse($data, $code = 200) {
     http_response_code($code);
     header('Content-Type: application/json');
@@ -43,7 +43,7 @@ function jsonSuccess($message, $data = []) {
     jsonResponse(array_merge(['message' => $message], $data));
 }
 
-// ── CORS (dev helper) ─────────────────────────────────────────
+// ── CORS (dev helper)
 function setCorsHeaders() {
     header('Access-Control-Allow-Origin: http://localhost:8080');
     header('Access-Control-Allow-Credentials: true');
@@ -52,7 +52,7 @@ function setCorsHeaders() {
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { exit; }
 }
 
-// ── Input Sanitization ────────────────────────────────────────
+// ── Input Sanitization 
 function sanitize($value) {
     return htmlspecialchars(strip_tags(trim($value)), ENT_QUOTES, 'UTF-8');
 }

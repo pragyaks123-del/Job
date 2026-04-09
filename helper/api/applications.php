@@ -1,7 +1,7 @@
 <?php
-// ============================================================
+
 // applications.php - For 4.2 and 4.3
-// ============================================================
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: http://localhost:8080');
 header('Access-Control-Allow-Credentials: true');
@@ -36,9 +36,9 @@ try {
     jsonError($e->getMessage(), 500);
 }
 
-// ============================================================
+
 // 4.2 - REVIEW APPLICATIONS (Employer view applicants per job)
-// ============================================================
+
 function handleGetApplications() {
     global $pdo;
     
@@ -76,9 +76,9 @@ function handleGetApplications() {
     jsonResponse(['applications' => $applications]);
 }
 
-// ============================================================
+
 // 4.3 - UPDATE APPLICATION STATUS
-// ============================================================
+
 function handleUpdateStatus() {
     global $pdo;
     

@@ -1,0 +1,1214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Seeker Dashboard | Smart Job Portal</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #20b2aa;
+        --primary-dark: #178f88;
+        --primary-light: #e0f7f6;
+        --bg-base: #f7f9fc;
+        --bg-surface: #ffffff;
+        --text-pri: #0f172a;
+        --text-sec: #334155;
+        --text-muted: #64748b;
+        --border: #e4e9f2;
+        --success: #10b981;
+        --danger: #ef4444;
+        --radius: 12px;
+        --radius-lg: 20px;
+        --font: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        font-family: var(--font);
+        background: var(--bg-base);
+        color: var(--text-pri);
+        font-size: 14px;
+      }
+
+      .navbar {
+        background: #ffffff;
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 110;
+        padding: 0 32px;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .logo {
+        font-size: 1.6rem;
+        font-weight: 800;
+        text-decoration: none;
+        color: var(--text-pri);
+      }
+      .logo span {
+        color: var(--primary);
+      }
+      .nav-links a {
+        padding: 6px 18px;
+        border-radius: 40px;
+        text-decoration: none;
+        color: var(--text-sec);
+        margin: 0 5px;
+      }
+      .nav-links a.active,
+      .nav-links a:hover {
+        background: var(--primary-light);
+        color: var(--primary-dark);
+      }
+      .user-chip {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: var(--primary-light);
+        padding: 5px 16px 5px 8px;
+        border-radius: 40px;
+      }
+      .user-avatar {
+        width: 34px;
+        height: 34px;
+        background: var(--primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+      }
+      .logout-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: #ef4444;
+        font-weight: 600;
+      }
+      .dashboard-container {
+        max-width: 1440px;
+        margin: 28px auto;
+        padding: 0 32px;
+      }
+      .stats-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      .stat-card {
+        background: var(--bg-surface);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        border: 1px solid var(--border);
+        text-align: center;
+      }
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--primary);
+      }
+      .dashboard-tabs {
+        display: flex;
+        gap: 8px;
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 60px;
+        padding: 6px;
+        width: fit-content;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+      }
+      .tab-btn {
+        padding: 10px 28px;
+        border-radius: 40px;
+        font-weight: 600;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+      }
+      .tab-btn.active {
+        background: var(--primary);
+        color: white;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      .job-card {
+        background: var(--bg-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border);
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+      }
+      .job-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+      }
+      .job-meta {
+        display: flex;
+        gap: 16px;
+        margin: 12px 0;
+        color: var(--text-muted);
+        flex-wrap: wrap;
+      }
+      .btn-sm {
+        padding: 8px 20px;
+        border-radius: 40px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid var(--border);
+        cursor: pointer;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 40px;
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+      .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .status-accepted {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .status-rejected {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .empty-state {
+        text-align: center;
+        padding: 60px;
+        color: var(--text-muted);
+      }
+      .search-bar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
+      .search-bar input,
+      .search-bar select {
+        padding: 10px 16px;
+        border-radius: 40px;
+        border: 1px solid var(--border);
+        flex: 1;
+        min-width: 150px;
+      }
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #1e293b;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 40px;
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+      }
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      .loading {
+        text-align: center;
+        padding: 40px;
+        color: var(--text-muted);
+      }
+      @media (max-width: 768px) {
+        .stats-cards {
+          grid-template-columns: 1fr;
+        }
+        .dashboard-tabs {
+          width: 100%;
+        }
+        .navbar {
+          padding: 0 16px;
+        }
+        .dashboard-container {
+          padding: 0 16px;
+        }
+      }
+
+      /* Notification Bell & Dropdown */
+      .notification-wrapper {
+        position: relative;
+        cursor: pointer;
+      }
+      .notification-bell {
+        background: transparent;
+        border: none;
+        font-size: 1.2rem;
+        color: var(--text-sec);
+        position: relative;
+        padding: 8px;
+        border-radius: 50%;
+        transition: background 0.2s;
+      }
+      .notification-bell:hover {
+        background: var(--primary-light);
+      }
+      .notification-badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: var(--danger);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 20px;
+        min-width: 18px;
+        text-align: center;
+      }
+      .notification-dropdown {
+        position: absolute;
+        top: 45px;
+        right: 0;
+        width: 350px;
+        max-height: 400px;
+        overflow-y: auto;
+        background: white;
+        border-radius: var(--radius-lg);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        z-index: 200;
+        display: none;
+      }
+      .notification-dropdown.show {
+        display: block;
+      }
+      .notification-header {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+      }
+      .notification-item {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .notification-item:hover {
+        background: var(--primary-xlight);
+      }
+      .notification-item.unread {
+        background: var(--primary-light);
+      }
+      .notification-message {
+        font-size: 0.85rem;
+        color: var(--text-pri);
+      }
+      .notification-time {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        margin-top: 4px;
+      }
+      .mark-read-btn {
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-size: 0.7rem;
+        cursor: pointer;
+      }
+
+      /* Profile Dropdown */
+      .profile-wrapper {
+        position: relative;
+      }
+      .profile-dropdown {
+        position: absolute;
+        top: 45px;
+        right: 0;
+        width: 250px;
+        background: white;
+        border-radius: var(--radius-lg);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        z-index: 200;
+        display: none;
+      }
+      .profile-dropdown.show {
+        display: block;
+      }
+      .profile-info {
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+        text-align: center;
+      }
+      .profile-name {
+        font-weight: 700;
+        margin-top: 8px;
+      }
+      .profile-email {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+      }
+      .dropdown-item {
+        padding: 10px 16px;
+        cursor: pointer;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .dropdown-item:hover {
+        background: var(--primary-xlight);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="#" class="logo">Job<span>Portal</span></a>
+      <div class="nav-links">
+        <a
+          href="#"
+          class="active"
+          onclick="
+            switchTab('applied');
+            return false;
+          "
+          >Dashboard</a
+        >
+        <a
+          href="#"
+          onclick="
+            switchTab('browse');
+            return false;
+          "
+          >Find Jobs</a
+        >
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px">
+        <!-- Notification Bell -->
+        <div class="notification-wrapper">
+          <button class="notification-bell" onclick="toggleNotifications()">
+            <i class="fas fa-bell"></i>
+            <span
+              id="notificationBadge"
+              class="notification-badge"
+              style="display: none"
+              >0</span
+            >
+          </button>
+          <div id="notificationDropdown" class="notification-dropdown">
+            <div class="notification-header">
+              <span>Notifications</span>
+              <button
+                class="mark-read-btn"
+                onclick="markAllNotificationsRead()"
+              >
+                Mark all as read
+              </button>
+            </div>
+            <div id="notificationList"></div>
+          </div>
+        </div>
+
+        <!-- Profile Dropdown -->
+        <div class="profile-wrapper">
+          <div class="user-chip" onclick="toggleProfile()">
+            <div class="user-avatar" id="userAvatar">JS</div>
+            <span id="userName">Loading...</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div id="profileDropdown" class="profile-dropdown">
+            <div class="profile-info">
+              <div class="user-avatar" style="margin: 0 auto">JS</div>
+              <div class="profile-name" id="profileName"></div>
+              <div class="profile-email" id="profileEmail"></div>
+            </div>
+            <div class="dropdown-item" onclick="logout()">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Rest of the dashboard container remains the same -->
+    <div class="dashboard-container">
+      <h1>My Dashboard</h1>
+      <p class="text-muted">
+        Track your applications and discover new opportunities
+      </p>
+
+      <div class="stats-cards">
+        <div class="stat-card">
+          <div class="stat-value" id="appliedCount">0</div>
+          <div>Applied Jobs</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="savedCount">0</div>
+          <div>Saved Jobs</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="pendingCount">0</div>
+          <div>Pending Review</div>
+        </div>
+      </div>
+
+      <div class="dashboard-tabs">
+        <button class="tab-btn active" onclick="switchTab('applied')">
+          📋 Applied Jobs
+        </button>
+        <button class="tab-btn" onclick="switchTab('saved')">
+          ❤️ Saved Jobs
+        </button>
+        <button class="tab-btn" onclick="switchTab('browse')">
+          🔍 Apply For Jobs
+        </button>
+      </div>
+
+      <div id="appliedTab" class="tab-content active">
+        <div id="appliedJobsList">
+          <div class="loading">Loading your applications...</div>
+        </div>
+      </div>
+
+      <div id="savedTab" class="tab-content">
+        <div id="savedJobsList">
+          <div class="loading">Loading saved jobs...</div>
+        </div>
+      </div>
+
+      <div id="browseTab" class="tab-content">
+        <div class="search-bar">
+          <input
+            type="text"
+            id="searchKeyword"
+            placeholder="🔍 Job title or skills"
+            oninput="filterBrowseJobs()"
+          />
+          <input
+            type="text"
+            id="searchLocation"
+            placeholder="📍 Location"
+            oninput="filterBrowseJobs()"
+          />
+          <select id="filterType" onchange="filterBrowseJobs()">
+            <option value="">All Types</option>
+            <option value="full-time">Full Time</option>
+            <option value="part-time">Part Time</option>
+            <option value="contract">Contract</option>
+            <option value="remote">Remote</option>
+          </select>
+        </div>
+        <div id="browseJobsList">
+          <div class="loading">Loading available jobs...</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = "../../helper/api/";
+      const SEEKER_API = `${API_BASE}seeker.php`;
+      const SESSION_API = "../../backend/includes/helpers.php?action=session";
+
+      let currentUser = null;
+      let allJobs = [];
+      let appliedJobs = [];
+      let savedJobsIds = [];
+      let notifications = [];
+      let unreadCount = 0;
+      let hasBackendSeekerSession = false;
+
+      function showToast(message, isError = false) {
+        const toast = document.createElement("div");
+        toast.className = "toast";
+        toast.style.background = isError ? "#ef4444" : "#1e293b";
+        toast.innerHTML = `<i class="fas ${isError ? "fa-exclamation-circle" : "fa-check-circle"}"></i> ${message}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+      }
+
+      function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/[&<>]/g, function (m) {
+          if (m === "&") return "&amp;";
+          if (m === "<") return "&lt;";
+          if (m === ">") return "&gt;";
+          return m;
+        });
+      }
+
+      function formatSalary(min, max) {
+        if (!min && !max) return "Not specified";
+        if (min && max)
+          return `$${Number(min).toLocaleString()} - $${Number(max).toLocaleString()}`;
+        if (min) return `$${Number(min).toLocaleString()}+`;
+        return `$${Number(max).toLocaleString()}`;
+      }
+
+      function formatDate(dateStr) {
+        if (!dateStr) return "Recently";
+        return new Date(dateStr).toLocaleDateString();
+      }
+
+      function formatTimeAgo(dateStr) {
+        const date = new Date(dateStr);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+
+        if (diffMins < 1) return "Just now";
+        if (diffMins < 60) return `${diffMins} min ago`;
+        if (diffHours < 24)
+          return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+        return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+      }
+
+      function updateStats() {
+        document.getElementById("appliedCount").innerText = appliedJobs.length;
+        document.getElementById("savedCount").innerText = savedJobsIds.length;
+        const pendingCount = appliedJobs.filter(
+          (j) => j.status === "pending",
+        ).length;
+        document.getElementById("pendingCount").innerText = pendingCount;
+      }
+
+      function updateNotificationBadge() {
+        const badge = document.getElementById("notificationBadge");
+        if (unreadCount > 0) {
+          badge.style.display = "block";
+          badge.innerText = unreadCount > 99 ? "99+" : unreadCount;
+        } else {
+          badge.style.display = "none";
+        }
+      }
+
+      // ========== NOTIFICATION FUNCTIONS ==========
+      async function loadNotifications() {
+        if (!hasBackendSeekerSession) {
+          notifications = [];
+          unreadCount = 0;
+          updateNotificationBadge();
+          renderNotifications();
+          return;
+        }
+
+        try {
+          const response = await fetch(`${SEEKER_API}?action=notifications`, {
+            credentials: "include",
+          });
+          const data = await response.json();
+          if (!data.error) {
+            notifications = data.notifications || [];
+            unreadCount = data.unread_count || 0;
+            updateNotificationBadge();
+            renderNotifications();
+          }
+        } catch (error) {
+          console.warn("Failed to load notifications:", error);
+        }
+      }
+
+      function renderNotifications() {
+        const container = document.getElementById("notificationList");
+        if (!notifications.length) {
+          container.innerHTML =
+            '<div style="padding: 20px; text-align: center; color: #64748b;">No notifications</div>';
+          return;
+        }
+
+        let html = "";
+        notifications.forEach((notif) => {
+          html += `
+                <div class="notification-item ${notif.is_read ? "" : "unread"}" onclick="markNotificationRead(${notif.id})">
+                    <div class="notification-message">${escapeHtml(notif.message)}</div>
+                    <div class="notification-time">${formatTimeAgo(notif.created_at)}</div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+      }
+
+      async function markNotificationRead(notificationId) {
+        try {
+          await fetch(`${SEEKER_API}?action=mark_notification_read`, {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ notification_id: notificationId }),
+          });
+          await loadNotifications();
+        } catch (error) {
+          console.warn("Failed to mark notification read:", error);
+        }
+      }
+
+      async function markAllNotificationsRead() {
+        try {
+          await fetch(`${SEEKER_API}?action=mark_notification_read`, {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ notification_id: 0 }),
+          });
+          await loadNotifications();
+          showToast("All notifications marked as read");
+        } catch (error) {
+          console.warn("Failed to mark all read:", error);
+        }
+      }
+
+      function toggleNotifications() {
+        const dropdown = document.getElementById("notificationDropdown");
+        dropdown.classList.toggle("show");
+        // Close profile dropdown if open
+        document.getElementById("profileDropdown").classList.remove("show");
+      }
+
+      function toggleProfile() {
+        const dropdown = document.getElementById("profileDropdown");
+        dropdown.classList.toggle("show");
+        // Close notification dropdown if open
+        document
+          .getElementById("notificationDropdown")
+          .classList.remove("show");
+      }
+
+      // Close dropdowns when clicking outside
+      document.addEventListener("click", function (event) {
+        if (!event.target.closest(".notification-wrapper")) {
+          document
+            .getElementById("notificationDropdown")
+            .classList.remove("show");
+        }
+        if (!event.target.closest(".profile-wrapper")) {
+          document.getElementById("profileDropdown").classList.remove("show");
+        }
+      });
+
+      // ========== AUTHENTICATION ==========
+      async function checkAuth() {
+        const storedUser = localStorage.getItem("jobportal_user");
+        if (!storedUser) {
+          window.location.href = "login.html";
+          return false;
+        }
+
+        currentUser = JSON.parse(storedUser);
+        if (currentUser.role !== "seeker") {
+          window.location.href = "login.html";
+          return false;
+        }
+
+        try {
+          const response = await fetch(SESSION_API, {
+            credentials: "include",
+          });
+          const data = await response.json();
+          hasBackendSeekerSession = !!(
+            response.ok &&
+            data.user &&
+            data.user.role === "seeker"
+          );
+
+          if (hasBackendSeekerSession) {
+            currentUser = data.user;
+            localStorage.setItem("jobportal_user", JSON.stringify(currentUser));
+          }
+        } catch (error) {
+          hasBackendSeekerSession = false;
+        }
+
+        document.getElementById("userName").innerText = currentUser.name;
+        document.getElementById("userAvatar").innerText =
+          currentUser.name.charAt(0);
+        document.getElementById("profileName").innerText = currentUser.name;
+        document.getElementById("profileEmail").innerText = currentUser.email;
+        return true;
+      }
+
+      // ========== API CALLS ==========
+      async function loadAllJobs() {
+        try {
+          const response = await fetch(`${API_BASE}jobs.php?action=list`, {
+            credentials: "include",
+          });
+          const data = await response.json();
+          if (!data.error && data.jobs && data.jobs.length > 0) {
+            allJobs = data.jobs.filter((job) => job.status === "open");
+          } else {
+            throw new Error("No jobs from backend");
+          }
+        } catch (error) {
+          console.warn("Using demo jobs:", error);
+          allJobs = [
+            {
+              id: 1,
+              title: "Frontend Developer",
+              description: "React developer needed",
+              category: "Technology",
+              job_type: "full-time",
+              location: "Remote",
+              salary_min: 70000,
+              salary_max: 110000,
+              skills: "React, JS, CSS",
+              status: "open",
+              employer_name: "TechCorp",
+            },
+            {
+              id: 2,
+              title: "Marketing Specialist",
+              description: "Digital marketing expert",
+              category: "Marketing",
+              job_type: "full-time",
+              location: "New York",
+              salary_min: 55000,
+              salary_max: 75000,
+              skills: "SEO, Analytics",
+              status: "open",
+              employer_name: "Growth Inc",
+            },
+            {
+              id: 3,
+              title: "UI/UX Designer",
+              description: "Figma expert",
+              category: "Design",
+              job_type: "contract",
+              location: "Remote",
+              salary_min: 60000,
+              salary_max: 90000,
+              skills: "Figma, Adobe XD",
+              status: "open",
+              employer_name: "Design Studio",
+            },
+          ];
+        }
+        filterBrowseJobs();
+      }
+
+      async function loadAppliedJobs() {
+        if (!hasBackendSeekerSession) {
+          const stored = localStorage.getItem("demo_applied_jobs");
+          appliedJobs = stored ? JSON.parse(stored) : [];
+          renderAppliedJobs();
+          updateStats();
+          return;
+        }
+
+        try {
+          const response = await fetch(`${SEEKER_API}?action=applied_jobs`, {
+            credentials: "include",
+          });
+          const data = await response.json();
+          if (!data.error && data.applications) {
+            appliedJobs = data.applications;
+          } else {
+            const stored = localStorage.getItem("demo_applied_jobs");
+            appliedJobs = stored ? JSON.parse(stored) : [];
+          }
+        } catch (error) {
+          const stored = localStorage.getItem("demo_applied_jobs");
+          appliedJobs = stored ? JSON.parse(stored) : [];
+        }
+        renderAppliedJobs();
+        updateStats();
+      }
+
+      async function loadSavedJobs() {
+        if (!hasBackendSeekerSession) {
+          const stored = localStorage.getItem("demo_saved_jobs");
+          savedJobsIds = stored ? JSON.parse(stored) : [];
+          renderSavedJobs();
+          updateStats();
+          return;
+        }
+
+        try {
+          const response = await fetch(`${SEEKER_API}?action=saved_jobs`, {
+            credentials: "include",
+          });
+          const data = await response.json();
+          if (!data.error && data.saved_jobs) {
+            savedJobsIds = data.saved_jobs.map((job) => job.id);
+          } else {
+            const stored = localStorage.getItem("demo_saved_jobs");
+            savedJobsIds = stored ? JSON.parse(stored) : [];
+          }
+        } catch (error) {
+          const stored = localStorage.getItem("demo_saved_jobs");
+          savedJobsIds = stored ? JSON.parse(stored) : [];
+        }
+        renderSavedJobs();
+        updateStats();
+      }
+
+      async function saveJob(jobId) {
+        if (savedJobsIds.includes(jobId)) return;
+
+        if (!hasBackendSeekerSession) {
+          savedJobsIds.push(jobId);
+          localStorage.setItem("demo_saved_jobs", JSON.stringify(savedJobsIds));
+          showToast("Job saved (local)");
+          renderSavedJobs();
+          filterBrowseJobs();
+          updateStats();
+          return;
+        }
+
+        try {
+          const response = await fetch(`${SEEKER_API}?action=save_job`, {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ job_id: jobId }),
+          });
+          const data = await response.json();
+          if (data.error) throw new Error(data.error);
+          showToast("Job saved!");
+          await loadSavedJobs();
+          filterBrowseJobs();
+        } catch (error) {
+          if (!savedJobsIds.includes(jobId)) {
+            savedJobsIds.push(jobId);
+            localStorage.setItem(
+              "demo_saved_jobs",
+              JSON.stringify(savedJobsIds),
+            );
+            showToast("Job saved (local)");
+            renderSavedJobs();
+            filterBrowseJobs();
+            updateStats();
+          }
+        }
+      }
+
+      async function unsaveJob(jobId) {
+        if (!hasBackendSeekerSession) {
+          savedJobsIds = savedJobsIds.filter((id) => id !== jobId);
+          localStorage.setItem("demo_saved_jobs", JSON.stringify(savedJobsIds));
+          showToast("Removed (local)");
+          renderSavedJobs();
+          filterBrowseJobs();
+          updateStats();
+          return;
+        }
+
+        try {
+          const response = await fetch(`${SEEKER_API}?action=unsave_job`, {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ job_id: jobId }),
+          });
+          const data = await response.json();
+          if (data.error) throw new Error(data.error);
+          showToast("Removed from saved");
+          await loadSavedJobs();
+          filterBrowseJobs();
+        } catch (error) {
+          savedJobsIds = savedJobsIds.filter((id) => id !== jobId);
+          localStorage.setItem("demo_saved_jobs", JSON.stringify(savedJobsIds));
+          showToast("Removed (local)");
+          renderSavedJobs();
+          filterBrowseJobs();
+          updateStats();
+        }
+      }
+
+      async function applyForJob(jobId) {
+        const alreadyApplied = appliedJobs.some((app) => app.job_id === jobId);
+        if (alreadyApplied) {
+          showToast("You already applied for this job", true);
+          return;
+        }
+
+        const job = allJobs.find((j) => j.id === jobId);
+        if (!job) return;
+
+        if (!hasBackendSeekerSession) {
+          const newApplication = {
+            job_id: jobId,
+            status: "pending",
+            applied_at: new Date().toISOString(),
+            title: job.title,
+          };
+          appliedJobs.push(newApplication);
+          localStorage.setItem(
+            "demo_applied_jobs",
+            JSON.stringify(appliedJobs),
+          );
+          if (savedJobsIds.includes(jobId)) {
+            await unsaveJob(jobId);
+          }
+          showToast(`Applied to ${job.title} (local)`);
+          renderAppliedJobs();
+          filterBrowseJobs();
+          updateStats();
+          return;
+        }
+
+        try {
+          const response = await fetch(`${SEEKER_API}?action=apply`, {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ job_id: jobId, cover_letter: "" }),
+          });
+          const data = await response.json();
+          if (data.error) throw new Error(data.error);
+          showToast(`Applied to ${job.title}!`);
+          await loadAppliedJobs();
+          await loadNotifications(); // Refresh notifications
+          if (savedJobsIds.includes(jobId)) {
+            await unsaveJob(jobId);
+          }
+          filterBrowseJobs();
+        } catch (error) {
+          const newApplication = {
+            job_id: jobId,
+            status: "pending",
+            applied_at: new Date().toISOString(),
+            title: job.title,
+          };
+          appliedJobs.push(newApplication);
+          localStorage.setItem(
+            "demo_applied_jobs",
+            JSON.stringify(appliedJobs),
+          );
+          showToast(`Applied to ${job.title} (local)`);
+          renderAppliedJobs();
+          filterBrowseJobs();
+          updateStats();
+        }
+      }
+
+      // ========== RENDER FUNCTIONS (same as before) ==========
+      function renderAppliedJobs() {
+        const container = document.getElementById("appliedJobsList");
+        if (!appliedJobs.length) {
+          container.innerHTML = `<div class="empty-state"><i class="fas fa-folder-open fa-3x"></i><h3>No applications yet</h3><p>Browse jobs and click "Apply Now" to get started</p></div>`;
+          return;
+        }
+
+        let html = "";
+        appliedJobs.forEach((app) => {
+          const job = allJobs.find((j) => j.id === app.job_id) || {
+            title: app.title || "Job",
+            location: "N/A",
+            job_type: "N/A",
+            employer_name: "Company",
+            salary_min: 0,
+            salary_max: 0,
+          };
+          let statusClass = "status-pending";
+          if (app.status === "accepted") statusClass = "status-accepted";
+          if (app.status === "rejected") statusClass = "status-rejected";
+
+          html += `
+                <div class="job-card">
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                        <div class="job-title">${escapeHtml(job.title)}</div>
+                        <span class="status-badge ${statusClass}">${(app.status || "pending").toUpperCase()}</span>
+                    </div>
+                    <div class="job-meta">
+                        <span><i class="fas fa-building"></i> ${escapeHtml(job.employer_name)}</span>
+                        <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(job.location)}</span>
+                        <span><i class="fas fa-clock"></i> ${job.job_type}</span>
+                        <span>💰 ${formatSalary(job.salary_min, job.salary_max)}</span>
+                    </div>
+                    <div><small>Applied: ${formatDate(app.applied_at)}</small></div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+      }
+
+      function renderSavedJobs() {
+        const container = document.getElementById("savedJobsList");
+        const savedJobs = allJobs.filter((job) =>
+          savedJobsIds.includes(job.id),
+        );
+
+        if (!savedJobs.length) {
+          container.innerHTML = `<div class="empty-state"><i class="fas fa-heart-broken fa-3x"></i><h3>No saved jobs</h3><p>Save jobs you're interested in to review later</p></div>`;
+          return;
+        }
+
+        let html = "";
+        savedJobs.forEach((job) => {
+          html += `
+                <div class="job-card">
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                        <div class="job-title">${escapeHtml(job.title)}</div>
+                        <button class="btn-sm btn-outline" onclick="unsaveJob(${job.id})"><i class="fas fa-trash"></i> Remove</button>
+                    </div>
+                    <div class="job-meta">
+                        <span><i class="fas fa-building"></i> ${escapeHtml(job.employer_name)}</span>
+                        <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(job.location)}</span>
+                        <span>💰 ${formatSalary(job.salary_min, job.salary_max)}</span>
+                    </div>
+                    <div>${escapeHtml(job.description?.substring(0, 100))}...</div>
+                    <div style="margin-top: 12px;">
+                        <button class="btn-sm btn-primary" onclick="applyForJob(${job.id})">Apply Now</button>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+      }
+
+      function filterBrowseJobs() {
+        const keyword =
+          document.getElementById("searchKeyword")?.value.toLowerCase() || "";
+        const location =
+          document.getElementById("searchLocation")?.value.toLowerCase() || "";
+        const type = document.getElementById("filterType")?.value || "";
+
+        let filtered = allJobs.filter((job) => {
+          const alreadyApplied = appliedJobs.some(
+            (app) => app.job_id === job.id,
+          );
+          const matchKeyword =
+            !keyword ||
+            job.title.toLowerCase().includes(keyword) ||
+            (job.skills && job.skills.toLowerCase().includes(keyword));
+          const matchLocation =
+            !location ||
+            (job.location && job.location.toLowerCase().includes(location));
+          const matchType = !type || job.job_type === type;
+          return (
+            matchKeyword &&
+            matchLocation &&
+            matchType &&
+            !alreadyApplied &&
+            job.status === "open"
+          );
+        });
+        renderBrowseJobs(filtered);
+      }
+
+      function renderBrowseJobs(jobs) {
+        const container = document.getElementById("browseJobsList");
+        if (!jobs || !jobs.length) {
+          container.innerHTML = `<div class="empty-state"><i class="fas fa-search fa-3x"></i><h3>No jobs found</h3><p>Try different search terms or check back later</p></div>`;
+          return;
+        }
+
+        let html = "";
+        jobs.forEach((job) => {
+          const isSaved = savedJobsIds.includes(job.id);
+          html += `
+                <div class="job-card">
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                        <div class="job-title">${escapeHtml(job.title)}</div>
+                        <button class="btn-sm ${isSaved ? "btn-outline" : "btn-outline"}" onclick="${isSaved ? `unsaveJob(${job.id})` : `saveJob(${job.id})`}">
+                            ${isSaved ? '<i class="fas fa-bookmark"></i> Saved' : '<i class="far fa-bookmark"></i> Save'}
+                        </button>
+                    </div>
+                    <div class="job-meta">
+                        <span><i class="fas fa-building"></i> ${escapeHtml(job.employer_name || "Company")}</span>
+                        <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(job.location || "Remote")}</span>
+                        <span><i class="fas fa-clock"></i> ${job.job_type}</span>
+                        <span>💰 ${formatSalary(job.salary_min, job.salary_max)}</span>
+                    </div>
+                    <div>${escapeHtml(job.description?.substring(0, 120))}...</div>
+                    <div class="job-meta"><i class="fas fa-code"></i> Skills: ${job.skills || "Not specified"}</div>
+                    <div style="margin-top: 12px;">
+                        <button class="btn-sm btn-primary" onclick="applyForJob(${job.id})"><i class="fas fa-paper-plane"></i> Apply Now</button>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+      }
+
+      function switchTab(tabName) {
+        document.getElementById("appliedTab").classList.remove("active");
+        document.getElementById("savedTab").classList.remove("active");
+        document.getElementById("browseTab").classList.remove("active");
+
+        if (tabName === "applied") {
+          document.getElementById("appliedTab").classList.add("active");
+          renderAppliedJobs();
+        } else if (tabName === "saved") {
+          document.getElementById("savedTab").classList.add("active");
+          renderSavedJobs();
+        } else if (tabName === "browse") {
+          document.getElementById("browseTab").classList.add("active");
+          filterBrowseJobs();
+        }
+
+        const buttons = document.querySelectorAll(".tab-btn");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+        if (event && event.target) {
+          event.target.classList.add("active");
+        }
+      }
+
+      function logout() {
+        localStorage.removeItem("jobportal_user");
+        showToast("Logged out successfully");
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1000);
+      }
+
+      // Make functions global
+      window.switchTab = switchTab;
+      window.saveJob = saveJob;
+      window.unsaveJob = unsaveJob;
+      window.applyForJob = applyForJob;
+      window.filterBrowseJobs = filterBrowseJobs;
+      window.logout = logout;
+      window.toggleNotifications = toggleNotifications;
+      window.toggleProfile = toggleProfile;
+      window.markNotificationRead = markNotificationRead;
+      window.markAllNotificationsRead = markAllNotificationsRead;
+
+      // ========== INITIALIZATION ==========
+      async function init() {
+        if (!(await checkAuth())) return;
+        await loadAllJobs();
+        await loadAppliedJobs();
+        await loadSavedJobs();
+        await loadNotifications();
+
+        // Refresh notifications every 30 seconds
+        setInterval(loadNotifications, 30000);
+      }
+
+      init();
+    </script>
+  </body>
+</html>

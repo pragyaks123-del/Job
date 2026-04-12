@@ -1,5 +1,5 @@
 <?php
-// ── Employer: Create Job ──────────────────────────────────────
+//  Employer: Create Job 
 function handleCreate() {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') jsonError('POST required', 405);
     $user = requireAuth('employer');

@@ -1,5 +1,20 @@
 // Frontend/js/utils.js
-const API_BASE = "http://localhost:8080/job-portal-system/helper/api";
+function resolveApiBase() {
+  const { origin, pathname, protocol, hostname } = window.location;
+  const projectMatch = pathname.match(/^(.*?\/job-portal-system)(?:\/|$)/);
+
+  if (projectMatch) {
+    return `${origin}${projectMatch[1]}/helper/api`;
+  }
+
+  if (protocol === "http:" && hostname) {
+    return `http://${hostname}/job-portal-system/helper/api`;
+  }
+
+  return `${origin}/job-portal-system/helper/api`;
+}
+
+const API_BASE = resolveApiBase();
 
 export const api = {
   get: (url) =>

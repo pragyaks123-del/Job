@@ -21,7 +21,7 @@ try {
             a.resume_path,
             a.applied_at,
             j.title       AS job_title,
-            COALESCE(u.name,  CONCAT('Applicant #', a.user_id)) AS applicant_name,
+            COALESCE(u.fullname,  CONCAT('Applicant #', a.user_id)) AS applicant_name,
             COALESCE(u.email, '')                                AS applicant_email
         FROM applications a
         JOIN jobs j ON a.job_id = j.id

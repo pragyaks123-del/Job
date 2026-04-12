@@ -121,4 +121,30 @@ function handleUpdateStatus() {
     
     jsonResponse(['success' => true, 'message' => 'Status updated successfully']);
 }
+// Add this to your switch statement
+ case 'my_applications':
+    handleGetMyApplications();
+    break;
+
+function handleGetMyApplications() {
+    global $pdo;
+    
+    if (!isset($_SESSION['user'])) {
+        jsonError('Please login first', 401);
+    }
+    
+    $user = $_SESSION['user'];
+    
+    $stmt = $pdo->prepare("
+        SELECT a.*, j.title, j.location, j.salary_min, j.salary_max, 
+               j.job_type, j.status as job_status
+        FROM applications a
+        JOIN jobs j ON a.job_id = j.id
+        WHERE a.seeker_id = ?
+        ORDER BY a.applied_at DESC
+    ");
+    $stmt->execute([$user['id']]);
+    
+    jsonResponse(['applications' => $stmt->fetchAll(PDO::FETCH_ASSOC)]);
+}
 ?>
